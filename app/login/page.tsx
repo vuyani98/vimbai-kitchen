@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChefHat } from "lucide-react"
+import logo from '@/public/logo.png'
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -29,11 +30,11 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <div className="bg-orange-500 p-3 rounded-full">
-              <ChefHat className="h-8 w-8 text-white" />
+            <div className="p-3 rounded-full">
+              <img src={logo.src} style={{height: 80}}/>
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">RestaurantOS</CardTitle>
+          <CardTitle className="text-2xl font-bold">Vimbai's Kitchen</CardTitle>
           <CardDescription>Sign in to your restaurant management system</CardDescription>
         </CardHeader>
         <CardContent>

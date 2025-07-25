@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import logo from '@/public/logo.png'
 import { LayoutDashboard, ChefHat, FileText, Menu, Users, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react"
 
 const navigation = [
@@ -32,10 +33,10 @@ export function Sidebar() {
         <div className="flex h-16 items-center justify-between px-4 border-b border-gray-200 dark:border-gray-700">
           {!collapsed && (
             <div className="flex items-center space-x-2">
-              <div className="bg-orange-500 p-2 rounded-lg">
-                <ChefHat className="h-5 w-5 text-white" />
+              <div className="bg-white p-2 rounded-lg">
+                <img src={logo.src} style={{height: 50, width: 'auto'}} />
               </div>
-              <span className="font-bold text-lg">RestaurantOS</span>
+              <span className="font-bold text-lg">Vimbai's Kitchen</span>
             </div>
           )}
           <Button variant="ghost" size="sm" onClick={() => setCollapsed(!collapsed)} className="h-8 w-8 p-0">

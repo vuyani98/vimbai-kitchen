@@ -15,6 +15,7 @@ export default function DashboardLayout({
   const [user, setUser] = useState<any>(null)
   const router = useRouter()
 
+  console.log('Now in dashboard')
   useEffect(() => {
     const userData = localStorage.getItem("user")
     if (!userData) {
