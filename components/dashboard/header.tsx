@@ -13,13 +13,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ModeToggle } from "@/components/mode-toggle"
 import { User, LogOut, Settings } from "lucide-react"
+import {  DbUser } from '@/type'
 
 interface HeaderProps {
   user: {
+    name: string
     email: string
-    role: string
+    role: any
   }
-}
+} 
 
 export function Header({ user }: HeaderProps) {
   const router = useRouter()

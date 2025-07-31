@@ -75,3 +75,39 @@ export const signIn = async({email, password}: any) => {
     }
 
 }
+
+
+export const getCurrentUser = async () => {
+
+    try {
+        
+        const currentSession = await account.getSession('current');
+        const currentAccount = await account.get();
+
+        if (!currentAccount) {
+            console.log('No account')
+            throw new Error
+        }
+
+        console.log('current account:', currentAccount.$id)
+
+        const currentUser = await database.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal('accountId', currentAccount.$id)]
+        )
+
+        if (!currentUser) {
+            console.log('No user')
+            throw new Error
+        }
+
+        return currentUser.documents[0];
+
+    }
+
+    catch (error) {
+        console.log('Error getting user:', error);
+        throw error as string;
+    }
+}
