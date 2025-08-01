@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { Header } from "@/components/dashboard/header"
 import { DbUser } from "@/type";
+import { getCurrentUser } from "@/lib/appwrite";
 
 interface userData {
     name: string,
@@ -15,41 +16,37 @@ interface userData {
     role: any
 }
 
-export default function DashboardLayout({
+export default function DashboardLayout ({
   children,
 }: {
   children: React.ReactNode
 }) {
-  //const [user, setUser] = useState<any>(null)
-  const { user, setUser, fetchAuthenticatedUser } = useAuthStore()
+
+  const {setUser, isAuthenticated, fetchAuthenticatedUser } = useAuthStore()
   const router = useRouter()
 
-  fetchAuthenticatedUser();
-
-  console.log('Now in dashboard');
-
+  const isLoggedIn = localStorage.getItem("user") ? true : false;
+  const userJson = isLoggedIn ? JSON.parse(localStorage.getItem("user")!) : null;
+  const user  = userJson;
 
   useEffect(() => {
 
     const userData: userData = {
-      name: user?.name || '',
+      name: user?.name ||  '',
       email: user?.email || '',
-      role: user?.$permissions
+      role: user?.role || ''
     };
     
     //localStorage.getItem("user")
 
     if (!userData) {
       router.push("/login")
-    } else {
-      setUser(user)
-    }
+    } 
   }, [router])
 
-  if (!user) {
-    //console.log(user)
-    return (<div>Loading...</div>)
-    //router.push("/login")
+
+  if(!isLoggedIn) {
+    router.replace('/login')
   }
 
   return (
@@ -59,9 +56,9 @@ export default function DashboardLayout({
         {user && (
           <Header
             user={{
-              name: user.name,
-              email: user.email,
-              role: user.$permissions
+              name: user.name|| '',
+              email: user.email || '',
+              role: user.role || ''
             }}
           />
         )}

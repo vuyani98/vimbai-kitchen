@@ -11,18 +11,21 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChefHat } from "lucide-react"
 import logo from '@/public/logo.png'
+import useAuthStore from "@/store/auth.store";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const router = useRouter()
+  const { setUser } = useAuthStore();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     // Simulate login - in real app, validate credentials
     if (email && password) {
-      localStorage.setItem("user", JSON.stringify({ email, role: "manager" }))
-      await signIn({email, password});
+      const userData =   await signIn({email, password});
+      setUser(userData)
+
       router.push("/dashboard")
     }
   }

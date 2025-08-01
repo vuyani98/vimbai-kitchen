@@ -14,6 +14,8 @@ import {
 import { ModeToggle } from "@/components/mode-toggle"
 import { User, LogOut, Settings } from "lucide-react"
 import {  DbUser } from '@/type'
+import { logout } from "@/lib/appwrite"
+import useAuthStore from "@/store/auth.store"
 
 interface HeaderProps {
   user: {
@@ -25,9 +27,20 @@ interface HeaderProps {
 
 export function Header({ user }: HeaderProps) {
   const router = useRouter()
+  const {setUser} = useAuthStore();
 
   const handleLogout = () => {
+    
+    console.log('logging out 1')
+    const message = logout();
+
+    if (!message) {
+      console.log('error logging out')
+    }
+
     localStorage.removeItem("user")
+    setUser(null);
+
     router.push("/login")
   }
 
@@ -43,6 +56,7 @@ export function Header({ user }: HeaderProps) {
         return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
     }
   }
+
 
   return (
     <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
@@ -72,7 +86,7 @@ export function Header({ user }: HeaderProps) {
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
+                <span onClick={handleLogout}>Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

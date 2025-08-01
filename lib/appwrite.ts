@@ -1,5 +1,7 @@
+import { DbUser } from '@/type';
 import { Account, Avatars, Client, Databases, ID, Query, Storage} from 'appwrite';
 import process from 'process';
+
 
 
 interface UserInfo {
@@ -57,7 +59,7 @@ export const createUser = async({name, email, password}: UserInfo) =>{
     }
 
     catch (err) { 
-        console.log('error is: ', err);
+        //console.log('error is: ', err);
         throw err as string;
     }
 
@@ -67,10 +69,24 @@ export const signIn = async({email, password}: any) => {
 
     try {
         const session = await account.createEmailPasswordSession(email, password);
+        //console.log('Here is a session:',session)
+        const userId: string = session.userId;
+        const currentUserArray = await database.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [ Query.startsWith('accountId', userId)]
+        ); 
+
+        const currentUser = currentUserArray.documents[0];
+
+        localStorage.setItem("user", JSON.stringify(currentUser));
+
+        return currentUser as DbUser;
+
     }
 
     catch (error) {
-        console.error('Error signing in:', error);
+        //console.error('Error signing in:', error);
         throw error as string;
     }
 
@@ -82,19 +98,17 @@ export const getCurrentUser = async () => {
     try {
         
         const currentSession = await account.getSession('current');
-        const currentAccount = await account.get();
+        //const currentAccount = await account.get();
 
-        if (!currentAccount) {
+        if (!currentSession) {
             console.log('No account')
             throw new Error
         }
 
-        console.log('current account:', currentAccount.$id)
-
         const currentUser = await database.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.userCollectionId,
-            [Query.equal('accountId', currentAccount.$id)]
+           [ Query.startsWith('accountId', currentSession.userId)]
         )
 
         if (!currentUser) {
@@ -102,12 +116,38 @@ export const getCurrentUser = async () => {
             throw new Error
         }
 
-        return currentUser.documents[0];
+        console.log(currentUser.documents[0])
+        return currentUser.documents[0] as DbUser;
 
     }
 
     catch (error) {
-        console.log('Error getting user:', error);
+        //console.log('Error getting user:', error);
+        throw error as string;
+    }
+
+}
+
+export const logout = async () => {
+
+    try {
+
+        console.log('logout funct called')
+        const currentSession = await account.getSession('current');
+        const sessionId = currentSession.$id;
+
+        const result = await account.deleteSession(sessionId);
+
+        if (!result) {
+            throw new Error('error logging out');
+        }
+
+        return { "message" : 'success'}
+
+    }
+
+    catch (error) {
+        console.log(error);
         throw error as string;
     }
 }

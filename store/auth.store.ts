@@ -31,7 +31,6 @@ const useAuthStore = create<AuthState>((set) => ({
 
             const user = await getCurrentUser();
 
-
             if (user) {
                 console.log('User is: ', user)
                 set({ isAuthenticated: true, user: user as DbUser});
@@ -45,6 +44,7 @@ const useAuthStore = create<AuthState>((set) => ({
 
         catch(error) {
             console.error('Error fetching authenticated user:', error);
+            throw error as string;
             set({ isAuthenticated: false, user: null})
         }
 
