@@ -151,3 +151,7 @@ export const logout = async () => {
         throw error as string;
     }
 }
+
+export const getImageUrl = async () => {
+    
+}
