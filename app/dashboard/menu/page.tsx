@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
+import { getImageUrl } from "@/lib/appwrite"
 import {
   Dialog,
   DialogContent,
@@ -79,6 +80,8 @@ export default function MenuManagement() {
     description: "",
     available: true,
   })
+
+  getImageUrl();
 
   const toggleAvailability = (id: string) => {
     setMenuItems((items) => items.map((item) => (item.id === id ? { ...item, available: !item.available } : item)))

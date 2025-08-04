@@ -15,8 +15,12 @@ export const appwriteConfig ={
     endpoint : process.env.REACT_APP_EXPO_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1',
     //platforrm : "com.hillsidedams.vimbaikitchen",
     projectId: process.env.REACT_APP_EXPO_PUBLIC_APPWRITE_PROJECT_ID || '688303be0005abab4d5e',
+    bucketId: '688c9f3a00092f05125d',
     databaseId: '6883a2180006448b9853',
-    userCollectionId: '68874a2d00238bca4bdb'
+    userCollectionId: '68874a2d00238bca4bdb',
+    menuCollectionId: '688ca4ab0033eb4a5185',
+    categoryColletionId: '688ca59c0020528b928d',
+    addOnCollectionId: '688ca72400204f7ed030'
 }
 
 export const client = new Client();
@@ -27,6 +31,7 @@ client
 export const account = new Account(client);
 const avatars = new Avatars(client);
 const database = new Databases(client);
+const storage = new Storage(client)
 
 export const createUser = async({name, email, password}: UserInfo) =>{
 
@@ -154,4 +159,28 @@ export const logout = async () => {
 
 export const getImageUrl = async () => {
     
+    //use image's unique ID
+    const imageId = '688ca0ab001def211520';
+
+    try {
+
+        const imagePromise = storage.getFileView(appwriteConfig.bucketId, imageId);
+
+        /*
+        imagePromise.then( response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        */
+       console.log(imagePromise)
+        
+    }
+
+    catch(error) {
+        console.log('Error trying',error);
+        throw error as string;
+    }
+
 }
